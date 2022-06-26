@@ -1,7 +1,34 @@
 
 
 from Order import Order
+import UserInterface
 
+class DeliveryInfo():
+    def __init__(self, createAddress = True, streetInfo = '123 Road rd', deliveryInstructions = ''):
+        #TODO Hold other address info defaulted to store info 
+        if(createAddress):
+            self.streetInfo = UserInterface.GetValidString('Street Address')
+            self.deliveryInstructions = UserInterface.GetValidString('Enter any special instructions', '')
+        else:
+            self.streetInfo = streetInfo
+            self.deliveryInstructions = deliveryInstructions
+
+    def __str__(self):
+        if(self.deliveryInstructions == ''):
+            return self.streetInfo
+        else:
+            return '{}, {}'.format(self.streetInfo, self.deliveryInstructions)
+
+    def Edit(self):
+        while(True):
+            num = UserInterface.enterNumber('Which property do you want to edit',
+             ['Street Address ({})'.format(self.color), 'Delivery Instructions ({})'.format(self.make)])
+            if(num == 1):
+                self.streetInfo = UserInterface.GetValidString('Enter New Color')
+            elif(num == 2):
+                self.deliveryInstructions = UserInterface.GetValidString('Enter New Make')
+            else:
+                break
 
 class DeliveryOrder(Order):
     
