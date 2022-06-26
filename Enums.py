@@ -37,3 +37,12 @@ class OrderType(Enum):
 
     def __str__(self):
         return enumNameFormatter(self.name)
+
+class Tab(Enum):
+    QUIT = -1
+    MENU = 1
+    ORDER = 2
+    ACCOUNT = 3
+
+    def __str__(self):
+        return enumNameFormatter(self.name)
