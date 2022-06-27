@@ -32,9 +32,9 @@ class DeliveryInfo():
 
 class DeliveryOrder(Order):
     
-    def __init__(self, fName, lName, orderItems, address):
-        super().__init__(fName, lName, orderItems)
-        self.address = address
+    def __init__(self, name, orderItems, deliveryInfo):
+        super().__init__(name, orderItems)
+        self.deliveryInfo = deliveryInfo
         self.driver = "None"
 
     def getConfirmationMessage(self):
@@ -56,4 +56,7 @@ class DeliveryOrder(Order):
             driverString = "\n{0} is delivering the order".format(self.driver)
         else:
             driverString = ""
-        return super().__str__() + "\nDeliver to {0} {1}".format(self.address, driverString)
+        return super().__str__() + "\nDeliver to {0} {1}".format(self.deliveryInfo, driverString)
+
+    def getOrderInfoMessage(self):
+        return 'Delivery\n' + super().getOrderInfoMessage() + '\nAddress: {}'.format(self.deliveryInfo)

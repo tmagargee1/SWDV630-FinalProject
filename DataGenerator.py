@@ -5,7 +5,7 @@ from Enums import CrustType, Size
 from MenuItem import MenuItem, PizzaMenuItem, ToppingMenuItem
 from sqlDb import Base, Engine
 
-def CreateDataBase():
+def CreateDataBase(session):
     print('Creating Objects to store')
     #Non pizza
     nonPizzaArray = {
@@ -46,9 +46,6 @@ def CreateDataBase():
 
     print('Creating database')
     Base.metadata.create_all(Engine)
-
-    Session = sessionmaker(bind=Engine)    
-    session = Session()
 
     #Add
     session.add_all(nonPizzaArray)

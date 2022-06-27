@@ -50,6 +50,9 @@ class PizzaMenuItem(MenuItem):
         "polymorphic_identity": "menuPizza",
     }
 
+    def __str__(self):
+        return '{} with {} crust'.format(self.name, self.crust)
+
     def __repr__(self):
         return "<PizzaMenuItem(name={}, price={}, description={}, size = {}, crust = {})>".format(
             self.name, self.price, self.description, self.size, self.crust)
@@ -71,12 +74,15 @@ class ToppingMenuItem(MenuItem):
     }
 
     def updatePrice(self, size):
+        self.price = self.getPrice(size)
+    
+    def getPrice(self, size):
         if(self.isPremium):
             premiumPriceArray = [1.5, 2, 2.5, 3]
-            self.price = premiumPriceArray[size.value]
+            return premiumPriceArray[size.value]
         else:
             regularPriceArray = [1, 1.5, 2, 2.25]
-            self.price = regularPriceArray[size.value]
+            return regularPriceArray[size.value]       
     
     def __repr__(self):
         return "<ToppingMenuItem(name={}, price={}, description={}, isPremium = {})>".format(

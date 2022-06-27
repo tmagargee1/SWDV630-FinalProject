@@ -5,21 +5,25 @@ from sqlDb import Base
 
 
 class OrderItem():
-    def __init__(self, menuItem, quantity):
+    def __init__(self, menuItem, quantity = 1):
         self.menuItem = menuItem
         self.quantity = quantity
 
     def getPrice(self):
         return self.menuItem.price * self.quantity
 
+    def getInfoString(self, showDescription = False):
+        des = ' ({})'.format(self.menuItem.description) if showDescription else ''
+        return '{}: {}{}'.format(self.quantity, self.menuItem.name, des)
+
     def __str__(self):
-        return '{}: {} \n   Costs: {}'.format(self.quantity, self.menuItem, moneyString(self.getPrice()))
+        return '{}\n    Costs: {}'.format(self.getInfoString(), moneyString(self.getPrice()))
 
     def clone(self):
         return copy.deepcopy(self)
 
 class PizzaOrderItem(OrderItem):
-    def __init__(self, menuItem, quantity):
+    def __init__(self, menuItem, quantity = 1):
         super().__init__(menuItem, quantity)
         self.toppings = []
 
@@ -33,22 +37,25 @@ class PizzaOrderItem(OrderItem):
     def getPrice(self):
         toppingPrice = 0
         for topping in self.toppings:
-            toppingPrice = topping.price
+            toppingPrice += topping.price
         
         toppingPrice = toppingPrice * self.quantity
         return super().getPrice() + toppingPrice
 
-    def __str__(self):
+    def getInfoString(self, showDescription = False):
         if len(self.toppings) > 0:
             toppingString = 'Topped with '
             for topping in self.toppings:
                 toppingString += topping.name + ', '
-            toppingString = toppingString[:-1] #Remove last comma
+            toppingString = toppingString[:-2] #Remove last comma
         else:
             toppingString = ''
-        
+
+        return '{}: {} {}'.format(self.quantity, self.menuItem, toppingString)
+
+    def __str__(self):
         priceString = 'Costs: {}'.format(moneyString(self.getPrice()))
-        return '{}: {} {} \n    {}'.format(self.quantity, self.menuItem, toppingString, priceString)
+        return '{}\n    {}'.format(self.getInfoString(), priceString)
 
 class OrderFoodIterator:
     def __init__(self, items):

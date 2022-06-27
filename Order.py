@@ -2,29 +2,15 @@ from abc import ABCMeta, abstractmethod
 from datetime import datetime, timedelta
 
 from Enums import PaymentMethod
-from sqlDb import Base
-from sqlalchemy import Column, Integer, String, Date, Float, Boolean
 
 class Order(metaclass=ABCMeta):
-    def __init__(self, fName, lName, orderItems):
-        self.customerFirstName = fName
-        self.customerLastName = lName
+    def __init__(self, name, orderItems):
+        self.customerName = name
         self.timePlaced = datetime.now()
         self.orderItems = orderItems
-        self.totalCost = orderItems.getTotalCost()
+        self.totalCost = sum(oi.getPrice() for oi in orderItems)
         self.paid = False
         self.estimatedTimeFoodRecieved = self.timePlaced + timedelta(minutes = self.getEstimatedTime())
-
-    #id = Column(Integer, primary_key = True)
-    #fName = Column(String)
-    #lName = Column(String)
-    #timePlaced = Column(Date)
-    #totalCost = Column(Float)
-    #paid = Column(Boolean)
-    #estimatedTimeFoodRecieved = Column(Date)
-
-    #def __repr__(self):
-    #    return "<Order{fname={0}, lname={}}>".format(self.fName, self.lName)
 
     @abstractmethod
     def getConfirmationMessage(self):
@@ -32,7 +18,11 @@ class Order(metaclass=ABCMeta):
     @abstractmethod    
     def getEstimatedTime(self):
         #Assumes 10 minutes from makeline to cut and one minute to prepare each item
-        return 10 + self.orderItems.getTotalNumItems()
+        return 10 + len(self.orderItems)
+
+    @abstractmethod
+    def getOrderInfoMessage(self):
+        return 'Name: {}'.format(self.customerName)
 
     def processPayment(self, paymentMethod):
         if(paymentMethod == PaymentMethod.CASH):
@@ -53,12 +43,11 @@ class Order(metaclass=ABCMeta):
         payString = 'Paid' if self.paid else 'Unpaid'
         payString =  payString + ' Total: ${:,.2f}'.format(self.totalCost)
 
-        return """Customer {0} {1} Ordered at {2} 
+        return """Customer {0} Ordered at {2} 
 Food will be recieved at {3}
-{4}""".format(self.customerFirstName, self.customerLastName, self.timePlaced, 
+{4}""".format(self.customerName, self.timePlaced, 
         self.estimatedTimeFoodRecieved, 
         payString)
-
 
 
 class CarryoutOrder(Order):
@@ -67,3 +56,6 @@ class CarryoutOrder(Order):
 
     def getEstimatedTime(self):
         return super().getEstimatedTime() + 1 #One minute to find customer
+
+    def getOrderInfoMessage(self):
+        return 'Carryout\n' + super().getOrderInfoMessage()

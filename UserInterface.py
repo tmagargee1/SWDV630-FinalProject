@@ -1,3 +1,4 @@
+
 import re
 from urllib import response
 
@@ -29,7 +30,21 @@ def GetValidString(prompt, regex ='^(?!\s*$).+', invalidInputText = 'must not be
     prompt += ': '
     invalidInputText = 'Input ' + invalidInputText + ' (try again): '
     response = input(prompt)
-    while(re.search(response, regex)):
+    while(re.search(response, regex) and regex != ''):
         response = input(invalidInputText)
     
     return response.strip()
+
+def GetValidNumber(prompt, low = 1, high = 10):
+    prompt += ': '
+    response = input(prompt)
+    isValid = response.isdigit()
+    if(isValid):
+        response = int(response)
+    while(not(isValid and low <= response and response <= high)):
+        response = input('Please enter number between {} and {}:'.format(low, high))
+        isValid = response.isdigit()
+        if(isValid):
+            response = int(response)
+    
+    return response

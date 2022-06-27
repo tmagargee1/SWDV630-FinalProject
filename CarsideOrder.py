@@ -31,10 +31,9 @@ class CarsideInfo():
     
 class CarsideOrder(Order):
     
-    def __init__(self, fName, lName, orderItems, carMake, carColor):
-        super().__init__(fName, lName, orderItems)
-        self.carMake = carMake
-        self.carColor = carColor
+    def __init__(self, name, orderItems, carsideInfo):
+        super().__init__(name, orderItems)
+        self.carInfo = carsideInfo
         self.carrier = "None"
 
     def getConfirmationMessage(self):
@@ -53,5 +52,7 @@ class CarsideOrder(Order):
             carrierString = "\n{0} is delivering the order".format(self.carrier)
         else:
             carrierString = ""
-        return super().__str__() + "\nCarry to car: {0} {1} {2}".format(self.carColor, self.carMake, carrierString)
+        return super().__str__() + "\nCarry to car: {} {}".format(self.carInfo, carrierString)
 
+    def getOrderInfoMessage(self):
+        return 'Carside\n' + super().getOrderInfoMessage() + '\nCar: {}'.format(self.carInfo)

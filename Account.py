@@ -31,12 +31,20 @@ class Account():
         else:
             self.editAccount()
 
-    def createAccount(self):        
+    def createAccount(self):   
+        self.enterBasicInfo()     
+        self.guest = False
         if(UserInterface.askYesNo('Do you want to add order info now')):
             while(True):
                 num = UserInterface.enterNumber('Which order type?', ['Carside', 'Delivery'])
                 if(num == 1):
                     self.enterCarsideInfo()
+                elif(num == 2):
+                    self.enterDeliveryInfo()
+                else:
+                    break
+                print()
+
 
     def editAccount(self):
         self.showAccountInfo()
@@ -51,6 +59,8 @@ class Account():
                 self.enterCarsideInfo()
             elif(num == 4):
                 self.enterDeliveryInfo()
+            else:
+                break
 
     def showAccountInfo(self):
         print('Basic Info')
@@ -103,7 +113,7 @@ class Account():
                 self.carsideInfo.append(CarsideInfo())
             elif(num > 1):
                 num -= 2
-                if(UserInterface.askYesNo('Do you want to delete this car?')):
+                if(UserInterface.askYesNo('Do you want to delete this car')):
                     del self.carsideInfo[num]
                     print('Deleted Car')
                 else:
@@ -123,7 +133,7 @@ class Account():
                 self.carsideInfo.append(CarsideInfo())
             elif(num > 1):
                 num -= 2
-                if(UserInterface.askYesNo('Do you want to delete this address?')):
+                if(UserInterface.askYesNo('Do you want to delete this address')):
                     del self.deliveryInfo[num]
                     print('Deleted address')
                 else:

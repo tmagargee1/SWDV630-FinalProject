@@ -21,28 +21,29 @@ class Size(Enum):
         return enumNameFormatter(self.name)
 
 class CrustType(Enum):
-    HAND_TOSSED = 0
-    THIN = 1
-    BROOKLYN = 2
-    GLUTEN_FREE = 3
-    PAN = 4
+    HAND_TOSSED = 1
+    THIN = 2
+    BROOKLYN = 3
+    GLUTEN_FREE = 4
+    PAN = 5
 
     def __str__(self):
         return enumNameFormatter(self.name)
 
 class OrderType(Enum):
-    CARRYOUT = 0
-    CARSIDE = 1
-    DELIVERY = 2
+    CARRYOUT = 1
+    CARSIDE = 2
+    DELIVERY = 3
 
     def __str__(self):
         return enumNameFormatter(self.name)
 
 class Tab(Enum):
     QUIT = -1
-    MENU = 1
-    ORDER = 2
-    ACCOUNT = 3
+    ACCOUNT = 1
+    MENU = 2
+    ORDER = 3
+    COMPLETE = 4
 
     def __str__(self):
         return enumNameFormatter(self.name)
